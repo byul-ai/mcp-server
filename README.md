@@ -1,4 +1,4 @@
-# @byul-ai/mcp
+# @byul/mcp
 
 Compliant with the latest Model Context Protocol (MCP) specification.
 
@@ -11,7 +11,7 @@ Compliant with the latest Model Context Protocol (MCP) specification.
 
 ## Overview
 
-`@byul-ai/mcp` is a stdio-based MCP server that proxies the Byul REST API. It exposes a small set of MCP tools and a resource that forward requests to Byul endpoints and return the original JSON response, plus a short article-count summary string.
+`@byul/mcp` is a stdio-based MCP server that proxies the Byul REST API. It exposes a small set of MCP tools and a resource that forward requests to Byul endpoints and return the original JSON response, plus a short article-count summary string.
 
 ## Requirements
 
@@ -21,7 +21,7 @@ Compliant with the latest Model Context Protocol (MCP) specification.
 ## Quick start
 
 ```bash
-BYUL_API_KEY=byul_xxxxxxxxxxxxx npx -y @byul-ai/mcp
+BYUL_API_KEY=byul_xxxxxxxxxxxxx npx -y @byul/mcp
 ```
 
 ## Configuration
@@ -74,7 +74,7 @@ Fetch top 5 news articles about AAPL from the past week
   "mcpServers": {
     "byul": {
       "command": "npx",
-      "args": ["-y", "@byul-ai/mcp"],
+      "args": ["-y", "@byul/mcp"],
       "env": { "BYUL_API_KEY": "byul_xxxxxxxxxxxxx" }
     }
   }
@@ -87,7 +87,7 @@ Fetch top 5 news articles about AAPL from the past week
 
 ```bash
 claude mcp add --name byul \
-  --command npx --args "-y" --args "@byul-ai/mcp" \
+  --command npx --args "-y" --args "@byul/mcp" \
   --env BYUL_API_KEY=byul_xxxxxxxxxxxxx --scope user
 ```
 
@@ -98,7 +98,7 @@ claude mcp add --name byul \
   "mcpServers": {
     "byul": {
       "command": "npx",
-      "args": ["-y", "@byul-ai/mcp"],
+      "args": ["-y", "@byul/mcp"],
       "env": { "BYUL_API_KEY": "byul_xxxxxxxxxxxxx" }
     }
   }
@@ -114,7 +114,7 @@ claude mcp add --name byul \
   "mcpServers": {
     "byul": {
       "command": "npx",
-      "args": ["-y", "@byul-ai/mcp"],
+      "args": ["-y", "@byul/mcp"],
       "env": { "BYUL_API_KEY": "byul_xxxxxxxxxxxxx" }
     }
   }
@@ -130,7 +130,7 @@ claude mcp add --name byul \
   "mcpServers": {
     "byul": {
       "command": "npx",
-      "args": ["-y", "@byul-ai/mcp"],
+      "args": ["-y", "@byul/mcp"],
       "env": { "BYUL_API_KEY": "byul_xxxxxxxxxxxxx" }
     }
   }
@@ -146,7 +146,7 @@ claude mcp add --name byul \
   "mcpServers": {
     "mcp-server-byul": {
       "command": "npx",
-      "args": ["-y", "@byul-ai/mcp"],
+      "args": ["-y", "@byul/mcp"],
       "env": {
         "BYUL_API_KEY": "byul_xxxxxxxxxxxxx"
       }
@@ -162,13 +162,13 @@ claude mcp add --name byul \
   - Fix: set `BYUL_API_KEY` in your environment before launching the server
 
 - Corporate proxy / firewall
-  - `npx` must reach the registry to download `@byul-ai/mcp` on first run; configure your proxy settings accordingly
+  - `npx` must reach the registry to download `@byul/mcp` on first run; configure your proxy settings accordingly
 
 - Windows / WSL path and env
   - PowerShell example:
     ```powershell
     $env:BYUL_API_KEY = "byul_xxxxxxxxxxxxx"
-    npx -y @byul-ai/mcp
+    npx -y @byul/mcp
     ```
 
 - Transport scope

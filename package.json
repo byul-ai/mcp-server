@@ -1,5 +1,5 @@
 {
-  "name": "@byul-ai/mcp",
+  "name": "@byul/mcp",
   "version": "0.1.0",
   "description": "Byul MCP server (stdio) proxying Byul REST API",
   "type": "module",
@@ -47,7 +47,7 @@
   "homepage": "https://byul.ai",
   "keywords": ["mcp", "server", "ai", "news", "byul", "sdk"],
   "sideEffects": false,
-  "packageManager": "pnpm@9",
+  "packageManager": "pnpm@10",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.2.0",
     "zod": "^3.23.8"

@@ -1,4 +1,4 @@
-# @byul-ai/mcp
+# @byul/mcp
 
 최신 Model Context Protocol (MCP) 사양을 준수합니다.
 
@@ -11,7 +11,7 @@
 
 ## 개요 (Overview)
 
-`@byul-ai/mcp`는 stdio 기반 MCP 서버로, Byul REST API를 프록시합니다. MCP 도구와 리소스를 통해 Byul 엔드포인트를 호출하고, 원본 JSON에 더해 기사 개수 요약 문자열을 함께 반환합니다.
+`@byul/mcp`는 stdio 기반 MCP 서버로, Byul REST API를 프록시합니다. MCP 도구와 리소스를 통해 Byul 엔드포인트를 호출하고, 원본 JSON에 더해 기사 개수 요약 문자열을 함께 반환합니다.
 
 ## 요구사항 (Requirements)
 
@@ -21,7 +21,7 @@
 ## 빠른 시작 (Quick start)
 
 ```bash
-BYUL_API_KEY=byul_xxxxxxxxxxxxx npx -y @byul-ai/mcp
+BYUL_API_KEY=byul_xxxxxxxxxxxxx npx -y @byul/mcp
 ```
 
 ## 구성 (Configuration)
@@ -74,7 +74,7 @@ LLM 클라이언트에 MCP 서버를 등록해 사용합니다. 클라이언트�
   "mcpServers": {
     "byul": {
       "command": "npx",
-      "args": ["-y", "@byul-ai/mcp"],
+      "args": ["-y", "@byul/mcp"],
       "env": { "BYUL_API_KEY": "byul_xxxxxxxxxxxxx" }
     }
   }
@@ -87,7 +87,7 @@ LLM 클라이언트에 MCP 서버를 등록해 사용합니다. 클라이언트�
 
 ```bash
 claude mcp add --name byul \
-  --command npx --args "-y" --args "@byul-ai/mcp" \
+  --command npx --args "-y" --args "@byul/mcp" \
   --env BYUL_API_KEY=byul_xxxxxxxxxxxxx --scope user
 ```
 
@@ -98,7 +98,7 @@ claude mcp add --name byul \
   "mcpServers": {
     "byul": {
       "command": "npx",
-      "args": ["-y", "@byul-ai/mcp"],
+      "args": ["-y", "@byul/mcp"],
       "env": { "BYUL_API_KEY": "byul_xxxxxxxxxxxxx" }
     }
   }
@@ -114,7 +114,7 @@ claude mcp add --name byul \
   "mcpServers": {
     "byul": {
       "command": "npx",
-      "args": ["-y", "@byul-ai/mcp"],
+      "args": ["-y", "@byul/mcp"],
       "env": { "BYUL_API_KEY": "byul_xxxxxxxxxxxxx" }
     }
   }
@@ -130,7 +130,7 @@ claude mcp add --name byul \
   "mcpServers": {
     "byul": {
       "command": "npx",
-      "args": ["-y", "@byul-ai/mcp"],
+      "args": ["-y", "@byul/mcp"],
       "env": { "BYUL_API_KEY": "byul_xxxxxxxxxxxxx" }
     }
   }
@@ -146,7 +146,7 @@ claude mcp add --name byul \
   "mcpServers": {
     "mcp-server-byul": {
       "command": "npx",
-      "args": ["-y", "@byul-ai/mcp"],
+      "args": ["-y", "@byul/mcp"],
       "env": {
         "BYUL_API_KEY": "byul_xxxxxxxxxxxxx"
       }
@@ -168,7 +168,7 @@ claude mcp add --name byul \
   - PowerShell 예시:
     ```powershell
     $env:BYUL_API_KEY = "byul_xxxxxxxxxxxxx"
-    npx -y @byul-ai/mcp
+    npx -y @byul/mcp
     ```
 
 - 전송 범위
