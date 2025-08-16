@@ -43,7 +43,7 @@ async function callByulApi(path, params = {}, options) {
 export function createServer(options) {
     const server = new McpServer({
         name: "@byul-ai/mcp",
-        version: "0.1.2",
+        version: "0.1.3",
     });
     // Tool: news.fetch - proxy GET /news
     server.registerTool("news.fetch", {
