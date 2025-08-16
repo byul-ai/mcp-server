@@ -86,9 +86,7 @@ LLM 클라이언트에 MCP 서버를 등록해 사용합니다. 클라이언트�
 #### CLI
 
 ```bash
-claude mcp add --name byul \
-  --command npx --args "-y" --args "@byul/mcp" \
-  --env BYUL_API_KEY=byul_xxxxxxxxxxxxx --scope user
+claude mcp add -e BYUL_API_KEY=byul_xxxxxxxxxxxxx --scope user byul npx -- -y @byul/mcp
 ```
 
 #### 설정 JSON

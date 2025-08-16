@@ -11,7 +11,10 @@ const DEFAULT_BASE_URL = "https://api.byul.ai/api/v2";
 // Helper to call Byul REST API with required headers
 async function callByulApi(path: string, params: Record<string, string | number | boolean | undefined> = {}, options?: ByulMcpOptions) {
   const baseUrl = options?.baseUrl ?? DEFAULT_BASE_URL;
-  const url = new URL(path, baseUrl);
+  // Normalize to avoid dropping base path when path starts with "/"
+  const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+  const normalizedPath = path.startsWith("/") ? path.slice(1) : path;
+  const url = new URL(normalizedPath, normalizedBase);
   Object.entries(params).forEach(([k, v]) => {
     if (v !== undefined && v !== null && v !== "") {
       url.searchParams.set(k, String(v));
@@ -51,7 +54,7 @@ async function callByulApi(path: string, params: Record<string, string | number 
 export function createServer(options?: ByulMcpOptions) {
   const server = new McpServer({
     name: "@byul-ai/mcp",
-    version: "0.1.0",
+    version: "0.1.1",
   });
 
   // Tool: news.fetch - proxy GET /news

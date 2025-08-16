@@ -1,6 +1,6 @@
 {
   "name": "@byul/mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Byul MCP server (stdio) proxying Byul REST API",
   "type": "module",
   "bin": {

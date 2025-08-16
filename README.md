@@ -86,9 +86,7 @@ Fetch top 5 news articles about AAPL from the past week
 #### CLI
 
 ```bash
-claude mcp add --name byul \
-  --command npx --args "-y" --args "@byul/mcp" \
-  --env BYUL_API_KEY=byul_xxxxxxxxxxxxx --scope user
+claude mcp add -e BYUL_API_KEY=byul_xxxxxxxxxxxxx --scope user byul npx -- -y @byul/mcp
 ```
 
 #### Settings JSON
