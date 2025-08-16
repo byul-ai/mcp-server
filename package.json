@@ -1,0 +1,60 @@
+{
+  "name": "@byul-ai/mcp",
+  "version": "0.1.0",
+  "description": "Byul MCP server (stdio) proxying Byul REST API",
+  "type": "module",
+  "bin": {
+    "byul-mcp": "./dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "README.ko.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node scripts/postbuild.js",
+    "dev": "tsx src/cli.ts",
+    "start": "node ./dist/cli.js",
+    "typecheck": "tsc --noEmit",
+    "prepare": "pnpm build"
+  },
+  "engines": {
+    "node": ">=18.17.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "license": "MIT",
+  "author": "Byul (https://byul.ai)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/byul-ai/mcp-server"
+  },
+  "bugs": {
+    "url": "https://github.com/byul-ai/mcp-server/issues"
+  },
+  "homepage": "https://byul.ai",
+  "keywords": ["mcp", "server", "ai", "news", "byul", "sdk"],
+  "sideEffects": false,
+  "packageManager": "pnpm@9",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.2.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.4"
+  }
+}
