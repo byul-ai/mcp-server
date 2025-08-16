@@ -70,8 +70,11 @@ export function createServer(options?: ByulMcpOptions) {
         minImportance: z.number().int().min(1).max(10).optional(),
         q: z.string().optional(),
         symbol: z.string().optional(),
+        category: z.string().optional(),
         startDate: z.string().optional(),
         endDate: z.string().optional(),
+        // Output formatting preference
+        format: z.enum(["json", "markdown", "text"]).optional(),
       },
     },
     async (args) => {
@@ -82,12 +85,62 @@ export function createServer(options?: ByulMcpOptions) {
         minImportance: args.minImportance,
         q: args.q,
         symbol: args.symbol,
+        category: (args as any).category,
         startDate: args.startDate,
         endDate: args.endDate,
       }, options);
 
       const items = Array.isArray(data?.items) ? data.items : [];
-      const summary = `총 ${items.length}건의 기사 반환`;
+      const summary = `Returned ${items.length} article(s)`;
+
+      // Build response content based on preferred format
+      const format = (args as any).format as undefined | "json" | "markdown" | "text";
+
+      const buildMarkdown = (list: any[]): string => {
+        if (list.length === 0) {
+          return `# News (0)\n\nNo articles.`;
+        }
+        const lines = list.map((it) => {
+          const date = it?.date ?? "";
+          const title = it?.title ?? "";
+          const url = it?.url ?? "";
+          return `- ${date} | ${title} | ${url}`;
+        });
+        return [`# News (${list.length})`, "", ...lines].join("\n");
+      };
+
+      const buildText = (list: any[]): string => {
+        if (list.length === 0) {
+          return `News (0)\nNo articles.`;
+        }
+        const lines = list.map((it) => {
+          const date = it?.date ?? "";
+          const title = it?.title ?? "";
+          const url = it?.url ?? "";
+          return `${date} | ${title} | ${url}`;
+        });
+        return [`News (${list.length})`, ...lines].join("\n");
+      };
+
+      if (format === "json") {
+        return {
+          content: [{ type: "text", text: JSON.stringify(data) }],
+        };
+      }
+
+      if (format === "markdown") {
+        return {
+          content: [{ type: "text", text: buildMarkdown(items) }],
+        };
+      }
+
+      if (format === "text") {
+        return {
+          content: [{ type: "text", text: buildText(items) }],
+        };
+      }
+
+      // Default: keep previous behavior (summary + JSON)
       return {
         content: [
           { type: "text", text: summary },
@@ -108,9 +161,55 @@ export function createServer(options?: ByulMcpOptions) {
     async (uri) => {
       const url = new URL(uri.href);
       const params = Object.fromEntries(url.searchParams.entries());
+      const format = (params as any).format as undefined | "json" | "markdown" | "text";
       const data = await callByulApi("/news", params, options);
       const items = Array.isArray(data?.items) ? data.items : [];
-      const summary = `총 ${items.length}건의 기사 반환`;
+      const summary = `Returned ${items.length} article(s)`;
+
+      const buildMarkdown = (list: any[]): string => {
+        if (list.length === 0) {
+          return `# News (0)\n\nNo articles.`;
+        }
+        const lines = list.map((it) => {
+          const date = it?.date ?? "";
+          const title = it?.title ?? "";
+          const urlStr = it?.url ?? "";
+          return `- ${date} | ${title} | ${urlStr}`;
+        });
+        return [`# News (${list.length})`, "", ...lines].join("\n");
+      };
+
+      const buildText = (list: any[]): string => {
+        if (list.length === 0) {
+          return `News (0)\nNo articles.`;
+        }
+        const lines = list.map((it) => {
+          const date = it?.date ?? "";
+          const title = it?.title ?? "";
+          const urlStr = it?.url ?? "";
+          return `${date} | ${title} | ${urlStr}`;
+        });
+        return [`News (${list.length})`, ...lines].join("\n");
+      };
+
+      if (format === "json") {
+        return {
+          contents: [{ uri: uri.href, text: JSON.stringify(data) }],
+        };
+      }
+
+      if (format === "markdown") {
+        return {
+          contents: [{ uri: uri.href, text: buildMarkdown(items) }],
+        };
+      }
+
+      if (format === "text") {
+        return {
+          contents: [{ uri: uri.href, text: buildText(items) }],
+        };
+      }
+
       return {
         contents: [
           { uri: uri.href, text: summary },
