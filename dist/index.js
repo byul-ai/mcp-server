@@ -1,4 +1,4 @@
-import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 const DEFAULT_BASE_URL = "https://api.byul.ai/api/v2";
@@ -59,10 +59,6 @@ export function createServer(options) {
             category: z.string().optional(),
             startDate: z.string().optional(),
             endDate: z.string().optional(),
-            // Output formatting preference
-            format: z.enum(["json", "markdown", "text"]).optional(),
-            // Whether to include a header line like "# News (N)" / "News (N)"
-            includeHeader: z.boolean().optional(),
         },
     }, async (args) => {
         const data = await callByulApi("/news", {
@@ -77,116 +73,16 @@ export function createServer(options) {
             endDate: args.endDate,
         }, options);
         const items = Array.isArray(data?.items) ? data.items : [];
-        const summary = `Returned ${items.length} article(s)`;
-        // Build response content based on preferred format
-        const format = args.format;
-        const includeHeader = Boolean(args.includeHeader);
-        const buildMarkdown = (list) => {
-            if (list.length === 0) {
-                return includeHeader ? `# News (0)\n\nNo articles.` : `No articles.`;
-            }
-            const lines = list.map((it) => {
+        // Fixed output: markdown list without header
+        const markdown = items.length === 0
+            ? "No articles."
+            : items.map((it) => {
                 const date = it?.date ?? "";
                 const title = it?.title ?? "";
                 const url = it?.url ?? "";
                 return `- ${date} | ${title} | ${url}`;
-            });
-            return includeHeader ? [`# News (${list.length})`, "", ...lines].join("\n") : lines.join("\n");
-        };
-        const buildText = (list) => {
-            if (list.length === 0) {
-                return includeHeader ? `News (0)\nNo articles.` : `No articles.`;
-            }
-            const lines = list.map((it) => {
-                const date = it?.date ?? "";
-                const title = it?.title ?? "";
-                const url = it?.url ?? "";
-                return `${date} | ${title} | ${url}`;
-            });
-            return includeHeader ? [`News (${list.length})`, ...lines].join("\n") : lines.join("\n");
-        };
-        if (format === "json") {
-            return {
-                content: [{ type: "text", text: JSON.stringify(data) }],
-            };
-        }
-        if (format === "markdown") {
-            return {
-                content: [{ type: "text", text: buildMarkdown(items) }],
-            };
-        }
-        if (format === "text") {
-            return {
-                content: [{ type: "text", text: buildText(items) }],
-            };
-        }
-        // Default: keep previous behavior (summary + JSON)
-        return {
-            content: [
-                { type: "text", text: summary },
-                { type: "text", text: JSON.stringify(data) },
-            ],
-        };
-    });
-    // Resource: byul://news?minImportance=... (returns summarized json)
-    server.registerResource("news-resource", new ResourceTemplate("byul://news{?limit,cursor,sinceId,minImportance,q,symbol,startDate,endDate}", { list: undefined }), {
-        title: "Byul News Resource",
-        description: "Dynamic resource to fetch news via URI parameters",
-    }, async (uri) => {
-        const url = new URL(uri.href);
-        const params = Object.fromEntries(url.searchParams.entries());
-        const format = params.format;
-        const includeHeader = Boolean(params.includeHeader);
-        // Strip non-API params before calling REST API
-        const { format: _f, includeHeader: _h, ...filteredParams } = params;
-        const data = await callByulApi("/news", filteredParams, options);
-        const items = Array.isArray(data?.items) ? data.items : [];
-        const summary = `Returned ${items.length} article(s)`;
-        const buildMarkdown = (list) => {
-            if (list.length === 0) {
-                return includeHeader ? `# News (0)\n\nNo articles.` : `No articles.`;
-            }
-            const lines = list.map((it) => {
-                const date = it?.date ?? "";
-                const title = it?.title ?? "";
-                const urlStr = it?.url ?? "";
-                return `- ${date} | ${title} | ${urlStr}`;
-            });
-            return includeHeader ? [`# News (${list.length})`, "", ...lines].join("\n") : lines.join("\n");
-        };
-        const buildText = (list) => {
-            if (list.length === 0) {
-                return includeHeader ? `News (0)\nNo articles.` : `No articles.`;
-            }
-            const lines = list.map((it) => {
-                const date = it?.date ?? "";
-                const title = it?.title ?? "";
-                const urlStr = it?.url ?? "";
-                return `${date} | ${title} | ${urlStr}`;
-            });
-            return includeHeader ? [`News (${list.length})`, ...lines].join("\n") : lines.join("\n");
-        };
-        if (format === "json") {
-            return {
-                contents: [{ uri: uri.href, text: JSON.stringify(data) }],
-            };
-        }
-        if (format === "markdown") {
-            return {
-                contents: [{ uri: uri.href, text: buildMarkdown(items) }],
-            };
-        }
-        if (format === "text") {
-            return {
-                contents: [{ uri: uri.href, text: buildText(items) }],
-            };
-        }
-        return {
-            contents: [
-                { uri: uri.href, text: summary },
-                { uri: uri.href, text: JSON.stringify(data) },
-            ],
-        };
+            }).join("\n");
+        return { content: [{ type: "text", text: markdown }] };
     });
     return server;
 }

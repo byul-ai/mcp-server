@@ -1,0 +1,33 @@
+# Node modules
+node_modules/
+
+# pnpm store
+.pnpm-store/
+
+# npm cache
+.npm/
+
+# Build outputs
+/dist/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Environment
+.env
+.env.*
+
+# Misc
+coverage/
+*.tgz
