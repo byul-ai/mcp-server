@@ -43,7 +43,7 @@ async function callByulApi(path, params = {}, options) {
 export function createServer(options) {
     const server = new McpServer({
         name: "@byul-ai/mcp",
-        version: "0.1.1",
+        version: "0.1.2",
     });
     // Tool: news.fetch - proxy GET /news
     server.registerTool("news.fetch", {
@@ -61,6 +61,8 @@ export function createServer(options) {
             endDate: z.string().optional(),
             // Output formatting preference
             format: z.enum(["json", "markdown", "text"]).optional(),
+            // Whether to include a header line like "# News (N)" / "News (N)"
+            includeHeader: z.boolean().optional(),
         },
     }, async (args) => {
         const data = await callByulApi("/news", {
@@ -78,9 +80,10 @@ export function createServer(options) {
         const summary = `Returned ${items.length} article(s)`;
         // Build response content based on preferred format
         const format = args.format;
+        const includeHeader = Boolean(args.includeHeader);
         const buildMarkdown = (list) => {
             if (list.length === 0) {
-                return `# News (0)\n\nNo articles.`;
+                return includeHeader ? `# News (0)\n\nNo articles.` : `No articles.`;
             }
             const lines = list.map((it) => {
                 const date = it?.date ?? "";
@@ -88,11 +91,11 @@ export function createServer(options) {
                 const url = it?.url ?? "";
                 return `- ${date} | ${title} | ${url}`;
             });
-            return [`# News (${list.length})`, "", ...lines].join("\n");
+            return includeHeader ? [`# News (${list.length})`, "", ...lines].join("\n") : lines.join("\n");
         };
         const buildText = (list) => {
             if (list.length === 0) {
-                return `News (0)\nNo articles.`;
+                return includeHeader ? `News (0)\nNo articles.` : `No articles.`;
             }
             const lines = list.map((it) => {
                 const date = it?.date ?? "";
@@ -100,7 +103,7 @@ export function createServer(options) {
                 const url = it?.url ?? "";
                 return `${date} | ${title} | ${url}`;
             });
-            return [`News (${list.length})`, ...lines].join("\n");
+            return includeHeader ? [`News (${list.length})`, ...lines].join("\n") : lines.join("\n");
         };
         if (format === "json") {
             return {
@@ -133,12 +136,15 @@ export function createServer(options) {
         const url = new URL(uri.href);
         const params = Object.fromEntries(url.searchParams.entries());
         const format = params.format;
-        const data = await callByulApi("/news", params, options);
+        const includeHeader = Boolean(params.includeHeader);
+        // Strip non-API params before calling REST API
+        const { format: _f, includeHeader: _h, ...filteredParams } = params;
+        const data = await callByulApi("/news", filteredParams, options);
         const items = Array.isArray(data?.items) ? data.items : [];
         const summary = `Returned ${items.length} article(s)`;
         const buildMarkdown = (list) => {
             if (list.length === 0) {
-                return `# News (0)\n\nNo articles.`;
+                return includeHeader ? `# News (0)\n\nNo articles.` : `No articles.`;
             }
             const lines = list.map((it) => {
                 const date = it?.date ?? "";
@@ -146,11 +152,11 @@ export function createServer(options) {
                 const urlStr = it?.url ?? "";
                 return `- ${date} | ${title} | ${urlStr}`;
             });
-            return [`# News (${list.length})`, "", ...lines].join("\n");
+            return includeHeader ? [`# News (${list.length})`, "", ...lines].join("\n") : lines.join("\n");
         };
         const buildText = (list) => {
             if (list.length === 0) {
-                return `News (0)\nNo articles.`;
+                return includeHeader ? `News (0)\nNo articles.` : `No articles.`;
             }
             const lines = list.map((it) => {
                 const date = it?.date ?? "";
@@ -158,7 +164,7 @@ export function createServer(options) {
                 const urlStr = it?.url ?? "";
                 return `${date} | ${title} | ${urlStr}`;
             });
-            return [`News (${list.length})`, ...lines].join("\n");
+            return includeHeader ? [`News (${list.length})`, ...lines].join("\n") : lines.join("\n");
         };
         if (format === "json") {
             return {
