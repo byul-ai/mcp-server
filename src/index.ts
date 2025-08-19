@@ -53,13 +53,13 @@ async function callByulApi(path: string, params: Record<string, string | number 
 
 export function createServer(options?: ByulMcpOptions) {
   const server = new McpServer({
-    name: "@byul-ai/mcp",
-    version: "0.1.3",
+    name: "byul_mcp",
+    version: "0.1.4",
   });
 
-  // Tool: news.fetch - proxy GET /news
+  // Tool: news_fetch - proxy GET /news
   server.registerTool(
-    "news.fetch",
+    "news_fetch",
     {
       title: "Fetch News",
       description: "Fetch latest financial news from Byul REST API with filters",

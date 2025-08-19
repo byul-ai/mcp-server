@@ -31,7 +31,7 @@ Register this server as an MCP provider in your LLM client. The client will laun
 ## Parameters
 
 - Tools (summary; see `@docs` for the full spec)
-  - `news.fetch` → proxies `GET /news` with filters: `limit`, `cursor`, `sinceId`, `minImportance`, `q`, `symbol`, `startDate`, `endDate`
+  - `news_fetch` → proxies `GET /news` with filters: `limit`, `cursor`, `sinceId`, `minImportance`, `q`, `symbol`, `startDate`, `endDate`
 - Resource (summary; see `@docs` for the full spec)
   - `byul://news{?limit,cursor,sinceId,minImportance,q,symbol,startDate,endDate}`
 
@@ -41,7 +41,7 @@ Each response contains:
 
 ## Available Tools
 
-### `news.fetch`
+### `news_fetch`
 - Description: Fetch latest financial news
 - Parameters:
   - `limit` (number, optional) – number of articles (1-100)

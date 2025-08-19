@@ -31,7 +31,7 @@ LLM 클라이언트에 MCP 서버를 등록해 사용합니다. 클라이언트�
 ## 파라미터 (Parameters)
 
 - 도구(요약; 자세한 스펙은 `@docs` 참고)
-  - `news.fetch` → `GET /news` 프록시. 파라미터: `limit`, `cursor`, `sinceId`, `minImportance`, `q`, `symbol`, `startDate`, `endDate`
+  - `news_fetch` → `GET /news` 프록시. 파라미터: `limit`, `cursor`, `sinceId`, `minImportance`, `q`, `symbol`, `startDate`, `endDate`
 - 리소스(요약; 자세한 스펙은 `@docs` 참고)
   - `byul://news{?limit,cursor,sinceId,minImportance,q,symbol,startDate,endDate}`
 
@@ -41,7 +41,7 @@ LLM 클라이언트에 MCP 서버를 등록해 사용합니다. 클라이언트�
 
 ## 사용 가능한 도구 (Available Tools)
 
-### `news.fetch`
+### `news_fetch`
 - 설명: 최신 뉴스 데이터 가져오기
 - 파라미터:
   - `limit` (number, optional) – 최대 기사 수(1-100)
