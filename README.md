@@ -153,6 +153,24 @@ claude mcp add -e BYUL_API_KEY=byul_xxxxxxxxxxxxx --scope user byul npx -- -y @b
 }
 ```
 
+### 6) Gemini CLI
+
+`~/.gemini/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "byul": {
+      "command": "npx",
+      "args": ["-y", "@byul/mcp"],
+      "env": { "BYUL_API_KEY": "byul_xxxxxxxxxxxxx" }
+    }
+  }
+}
+```
+
+If the `mcpServers` object does not exist, create it. This package supports stdio (local) transport only.
+
 ## Troubleshooting
 
 - Missing API key
